@@ -18,6 +18,4 @@
 
 This plugin may conflict with other hologram managers, please make an issue here on GitHub. I will do my best to work out all conflictions.
 
-You may also contact me with any issues in our [discord](https://discord.com/invite/gQ9m9W28U5).
-
 If anyone wishes to support me in my efforts to become a full time java developer donate on [PayPal](https://www.paypal.com/donate/?hosted_button_id=EDMDZVEP6P25U)
