@@ -1,0 +1,7 @@
+name: DamageIndicatorsFree
+version: '${project.version}'
+main: ca.rpgcraft.damageindicatorsfree.DamageIndicatorsFree
+api-version: 1.16
+authors: [ dsevvv ]
+description: Free version of Damage Indicators
+website: github.com/dsevvv
