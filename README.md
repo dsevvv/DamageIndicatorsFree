@@ -8,12 +8,6 @@
 
 - Displays amount of damage dealt to an entity by creating a hologram.
 
-# Goals
-
-- Create a config that will allow users to control the features of SevDamageIndicators.
-
-- Create a blood splat animation when entities are hit.
-
 # Support
 
 This plugin may conflict with other hologram managers, please make an issue here on GitHub. I will do my best to work out all conflictions.
