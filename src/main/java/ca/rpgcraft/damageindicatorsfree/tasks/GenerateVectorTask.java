@@ -5,7 +5,7 @@ import org.bukkit.util.Vector;
 
 import java.util.Random;
 
-public class GenerateVectorTask extends BukkitRunnable {
+public class GenerateVectorTask {
 
     private Random rand;
     private Vector vector;
@@ -13,13 +13,11 @@ public class GenerateVectorTask extends BukkitRunnable {
     private double y;
     private double z;
 
-
     public GenerateVectorTask()
     {
         rand = new Random();
     }
 
-    @Override
     public void run() {
 
         double horiRange = .25;
@@ -50,6 +48,7 @@ public class GenerateVectorTask extends BukkitRunnable {
 
     public Vector getVector()
     {
+        run();
         return vector;
     }
 

@@ -64,7 +64,8 @@ public class CreateHologramTask extends BukkitRunnable {
         hologram.setLeftLegPose(EulerAngle.ZERO.add(180, 0, 0));
         hologram.setRightLegPose(EulerAngle.ZERO.add(180, 0, 0));
         hologram.setInvulnerable(true);
-        hologram.setVelocity(generateVectorTask.getVector());
+        hologram.setVelocity(plugin.getRingBuffer().take());
+        plugin.getRingBuffer().put(generateVectorTask.getVector());
         hologramManager.addHologram(hologram);
 
         String customName = String.format(RED + "-%.1f", dmgFinal);

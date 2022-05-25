@@ -2,6 +2,7 @@ package ca.rpgcraft.damageindicatorsfree;
 
 import ca.rpgcraft.damageindicatorsfree.listeners.*;
 import ca.rpgcraft.damageindicatorsfree.tasks.GenerateVectorTask;
+import ca.rpgcraft.damageindicatorsfree.util.VectorRingBuffer;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.MultiLineChart;
 import org.bukkit.Bukkit;
@@ -18,10 +19,11 @@ public final class DamageIndicatorsFree extends JavaPlugin {
 
     private HologramManager hologramManager;
     private Logger logger;
+    private VectorRingBuffer ringBuffer;
 
     @Override
-    public void onEnable()
-    {
+    public void onEnable() {
+
         saveDefaultConfig();
 
         logger = this.getLogger();
@@ -29,9 +31,15 @@ public final class DamageIndicatorsFree extends JavaPlugin {
         logger.log(Level.INFO, "Initializing hologram manager...");
         hologramManager = new HologramManager();
 
-        logger.log(Level.INFO, "Initializing vector generator task...");
+        logger.log(Level.INFO, "Initializing vector generation...");
         GenerateVectorTask generateVectorTask = new GenerateVectorTask();
-        generateVectorTask.runTaskTimer(this, 0, 0);
+        ringBuffer = new VectorRingBuffer(50);
+        while(ringBuffer.put(generateVectorTask.getVector()));
+//        int i = 0;
+//        while(i < ringBuffer.getCapacity()){
+//            ringBuffer.put(generateVectorTask.getVector());
+//            i++;
+//        }
 
         logger.log(Level.INFO, "Registering listeners...");
         if(getConfig().getBoolean("players")){
@@ -71,5 +79,9 @@ public final class DamageIndicatorsFree extends JavaPlugin {
         }
         logger = null;
         hologramManager = null;
+    }
+
+    public VectorRingBuffer getRingBuffer() {
+        return ringBuffer;
     }
 }
