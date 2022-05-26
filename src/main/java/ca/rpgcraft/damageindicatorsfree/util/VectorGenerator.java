@@ -1,25 +1,19 @@
-package ca.rpgcraft.damageindicatorsfree.tasks;
+package ca.rpgcraft.damageindicatorsfree.util;
 
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import java.util.Random;
 
-public class GenerateVectorTask {
+public class VectorGenerator {
 
-    private Random rand;
     private Vector vector;
     private double x;
     private double y;
     private double z;
 
-    public GenerateVectorTask()
-    {
-        rand = new Random();
-    }
-
     public void run() {
-
+        Random rand = new Random();
         double horiRange = .25;
         double vertRange = .15;
 

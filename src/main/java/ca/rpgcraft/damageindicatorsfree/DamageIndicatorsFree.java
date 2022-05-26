@@ -1,7 +1,7 @@
 package ca.rpgcraft.damageindicatorsfree;
 
 import ca.rpgcraft.damageindicatorsfree.listeners.*;
-import ca.rpgcraft.damageindicatorsfree.tasks.GenerateVectorTask;
+import ca.rpgcraft.damageindicatorsfree.util.VectorGenerator;
 import ca.rpgcraft.damageindicatorsfree.util.VectorRingBuffer;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.MultiLineChart;
@@ -32,24 +32,18 @@ public final class DamageIndicatorsFree extends JavaPlugin {
         hologramManager = new HologramManager();
 
         logger.log(Level.INFO, "Initializing vector generation...");
-        GenerateVectorTask generateVectorTask = new GenerateVectorTask();
-        ringBuffer = new VectorRingBuffer(50);
-        while(ringBuffer.put(generateVectorTask.getVector()));
-//        int i = 0;
-//        while(i < ringBuffer.getCapacity()){
-//            ringBuffer.put(generateVectorTask.getVector());
-//            i++;
-//        }
+        VectorGenerator vectorGenerator = new VectorGenerator();
+        ringBuffer = new VectorRingBuffer(50, vectorGenerator);
 
         logger.log(Level.INFO, "Registering listeners...");
         if(getConfig().getBoolean("players")){
-            Bukkit.getPluginManager().registerEvents(new PlayerDamageByEntityEvent(this, generateVectorTask, hologramManager), this);
-            Bukkit.getPluginManager().registerEvents(new PlayerDamageByPlayerEvent(this, generateVectorTask, hologramManager), this);
-            Bukkit.getPluginManager().registerEvents(new PlayerDamageEvent(this, generateVectorTask, hologramManager), this);
+            Bukkit.getPluginManager().registerEvents(new PlayerDamageByEntityEvent(this, vectorGenerator, hologramManager), this);
+            Bukkit.getPluginManager().registerEvents(new PlayerDamageByPlayerEvent(this, vectorGenerator, hologramManager), this);
+            Bukkit.getPluginManager().registerEvents(new PlayerDamageEvent(this, vectorGenerator, hologramManager), this);
         }
         if(getConfig().getBoolean("mobs")){
-            Bukkit.getPluginManager().registerEvents(new EntityDamageByEntityEvent(this, generateVectorTask, hologramManager), this);
-            Bukkit.getPluginManager().registerEvents(new EntityDamageByPlayerEvent(this, generateVectorTask, hologramManager), this);
+            Bukkit.getPluginManager().registerEvents(new EntityDamageByEntityEvent(this, vectorGenerator, hologramManager), this);
+            Bukkit.getPluginManager().registerEvents(new EntityDamageByPlayerEvent(this, vectorGenerator, hologramManager), this);
         }
         Bukkit.getPluginManager().registerEvents(new HologramBurnListener(this), this);
 

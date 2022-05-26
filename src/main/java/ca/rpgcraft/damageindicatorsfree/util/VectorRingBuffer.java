@@ -3,59 +3,66 @@ package ca.rpgcraft.damageindicatorsfree.util;
 import org.bukkit.util.Vector;
 
 public class VectorRingBuffer {
-    public Vector[] vectors = null;
+    //class RingBuffer creates a ring buffer of Vectors of a given size.
+    //The buffer is filled with random Vectors.
 
-    private int capacity = 0;
-    private int writePos = 0;
-    private int available = 0;
+    private int size;
+    private Vector[] buffer;
+    private int writeIndex;
+    private int readIndex;
 
-    public VectorRingBuffer(int capacity){
-        this.capacity = capacity;
-        this.vectors = new Vector[capacity];
-    }
-
-    public void reset(){
-        writePos = 0;
-        available = 0;
-    }
-
-    public int getAvailable() {
-        return available;
-    }
-
-    public int getCapacity() {
-        return capacity;
-    }
-
-    public int remainingCapacity(){
-        return capacity - available;
-    }
-
-    public boolean put(Vector element){
-
-        if(available < capacity){
-            if(writePos >= capacity){
-                writePos = 0;
-            }
-            vectors[writePos] = element;
-            writePos++;
-            available++;
-            return true;
+    public VectorRingBuffer(int size, VectorGenerator vectorGenerator) {
+        this.size = size;
+        buffer = new Vector[size];
+        for(int i = 0; i < size; i++) {
+            buffer[i] = vectorGenerator.getVector();
         }
-
-        return false;
+        writeIndex = 0;
+        readIndex = 0;
     }
 
-    public Vector take(){
-        if(available == 0){
-            return null;
+    public Vector get(int index) {
+        return buffer[index];
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public int getWriteIndex() {
+        return writeIndex;
+    }
+
+    public int getReadIndex() {
+        return readIndex;
+    }
+
+    public void set(int index, Vector vector) {
+        buffer[index] = vector;
+    }
+
+    public Vector getNext() {
+        Vector next = buffer[readIndex];
+        readIndex++;
+        if(readIndex >= size) {
+            readIndex = 0;
         }
-        int nextSlot = writePos - available;
-        if(nextSlot < 0){
-            nextSlot += capacity;
+        return next;
+    }
+
+    public void setNext(Vector vector) {
+        buffer[writeIndex] = vector;
+        writeIndex++;
+        if(writeIndex >= size) {
+            writeIndex = 0;
         }
-        Vector nextElement = vectors[nextSlot];
-        available--;
-        return nextElement;
+    }
+
+    public void reset() {
+        for(int i = 0; i < size; i++) {
+            buffer[i] = new Vector(0,0,0);
+        }
+        writeIndex = 0;
+        readIndex = 0;
     }
 }

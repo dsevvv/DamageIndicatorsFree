@@ -2,6 +2,7 @@ package ca.rpgcraft.damageindicatorsfree.tasks;
 
 import ca.rpgcraft.damageindicatorsfree.DamageIndicatorsFree;
 import ca.rpgcraft.damageindicatorsfree.HologramManager;
+import ca.rpgcraft.damageindicatorsfree.util.VectorGenerator;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -21,27 +22,27 @@ public class CreateHologramTask extends BukkitRunnable {
 
     private final DamageIndicatorsFree plugin;
     private final EntityDamageEvent e;
-    private final GenerateVectorTask generateVectorTask;
+    private final VectorGenerator vectorGenerator;
     private final HologramManager hologramManager;
 
     private Player playerDamager = null;
 
     private final ChatColor RED  = ChatColor.RED;
 
-    public CreateHologramTask(DamageIndicatorsFree plugin, GenerateVectorTask generateVectorTask, EntityDamageEvent e, HologramManager hologramManager)
+    public CreateHologramTask(DamageIndicatorsFree plugin, VectorGenerator vectorGenerator, EntityDamageEvent e, HologramManager hologramManager)
     {
         this.plugin = plugin;
         this.e = e;
-        this.generateVectorTask = generateVectorTask;
+        this.vectorGenerator = vectorGenerator;
         this.hologramManager = hologramManager;
     }
 
-    public CreateHologramTask(DamageIndicatorsFree plugin, GenerateVectorTask generateVectorTask, EntityDamageEvent e, Player playerDamager, HologramManager hologramManager)
+    public CreateHologramTask(DamageIndicatorsFree plugin, VectorGenerator vectorGenerator, EntityDamageEvent e, Player playerDamager, HologramManager hologramManager)
     {
         this.plugin = plugin;
         this.e = e;
         this.playerDamager = playerDamager;
-        this.generateVectorTask = generateVectorTask;
+        this.vectorGenerator = vectorGenerator;
         this.hologramManager = hologramManager;
     }
 
@@ -64,8 +65,7 @@ public class CreateHologramTask extends BukkitRunnable {
         hologram.setLeftLegPose(EulerAngle.ZERO.add(180, 0, 0));
         hologram.setRightLegPose(EulerAngle.ZERO.add(180, 0, 0));
         hologram.setInvulnerable(true);
-        hologram.setVelocity(plugin.getRingBuffer().take());
-        plugin.getRingBuffer().put(generateVectorTask.getVector());
+        hologram.setVelocity(plugin.getRingBuffer().getNext());
         hologramManager.addHologram(hologram);
 
         String customName = String.format(RED + "-%.1f", dmgFinal);

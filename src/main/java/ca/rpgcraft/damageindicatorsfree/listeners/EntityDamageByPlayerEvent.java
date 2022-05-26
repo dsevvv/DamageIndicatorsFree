@@ -3,7 +3,7 @@ package ca.rpgcraft.damageindicatorsfree.listeners;
 import ca.rpgcraft.damageindicatorsfree.DamageIndicatorsFree;
 import ca.rpgcraft.damageindicatorsfree.HologramManager;
 import ca.rpgcraft.damageindicatorsfree.tasks.CreateHologramTask;
-import ca.rpgcraft.damageindicatorsfree.tasks.GenerateVectorTask;
+import ca.rpgcraft.damageindicatorsfree.util.VectorGenerator;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -13,13 +13,13 @@ import org.bukkit.event.entity.EntityDamageEvent;
 public class EntityDamageByPlayerEvent implements Listener {
 
     private final DamageIndicatorsFree plugin;
-    private final GenerateVectorTask generateVectorTask;
+    private final VectorGenerator vectorGenerator;
     private final HologramManager hologramManager;
 
-    public EntityDamageByPlayerEvent(DamageIndicatorsFree plugin, GenerateVectorTask generateVectorTask, HologramManager hologramManager)
+    public EntityDamageByPlayerEvent(DamageIndicatorsFree plugin, VectorGenerator vectorGenerator, HologramManager hologramManager)
     {
         this.plugin = plugin;
-        this.generateVectorTask = generateVectorTask;
+        this.vectorGenerator = vectorGenerator;
         this.hologramManager = hologramManager;
     }
 
@@ -34,7 +34,7 @@ public class EntityDamageByPlayerEvent implements Listener {
 
         if(!plugin.getConfig().getBoolean("sweeping-edge") && e.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK)) return;
 
-        CreateHologramTask createHologramTask = new CreateHologramTask(plugin, generateVectorTask, e, (Player) e.getDamager(), hologramManager);
+        CreateHologramTask createHologramTask = new CreateHologramTask(plugin, vectorGenerator, e, (Player) e.getDamager(), hologramManager);
         createHologramTask.run();
     }
 }
